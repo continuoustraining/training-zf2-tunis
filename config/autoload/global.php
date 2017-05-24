@@ -13,4 +13,7 @@
 
 return array(
     // ...
+//    'billing' => [
+//        'notifications' => false
+//    ]
 );

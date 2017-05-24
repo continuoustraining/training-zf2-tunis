@@ -11,6 +11,7 @@ namespace Application;
 
 use Application\Monitoring\MvcWatcher;
 use Application\Services\ArticleManager;
+use Zend\EventManager\Event;
 use Zend\Log\Logger;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -48,6 +49,10 @@ class Module
         /** @var MvcWatcher $mvcWatcher */
         $mvcWatcher = $serviceManager->get('mvc-watcher');
         $mvcWatcher->attach($eventManager);
+        
+//        $sharedManager->attach('*', '*', function (Event $e) {
+//            var_dump($e->getName());
+//        });
     }
     
     public function __invoke(MvcEvent $e) {

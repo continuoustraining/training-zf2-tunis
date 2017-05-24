@@ -28,11 +28,15 @@ class BillingManagerFactory implements FactoryInterface
     {
         $manager = new BillingManager();
         
-        $manager->getEventManager()
-            ->attach(
-                Bill::EVENT_PRINT,
-                    [$container->get('billing-notifier'), 'notify']
-            );
+        $config = $container->get('config');
+        
+        if ($config['billing']['notifications']) {
+            $manager->getEventManager()
+                ->attach(
+                    Bill::EVENT_PRINT,
+                        [$container->get('billing-notifier'), 'notify']
+                );
+        }
         
         return $manager;
     }

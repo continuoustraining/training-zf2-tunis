@@ -1,0 +1,13 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: fred
+ * Date: 24/05/2017
+ * Time: 09:57
+ */
+return [
+    'view_manager' => [
+        'display_not_found_reason' => true,
+        'display_exceptions'       => true,
+    ]
+];

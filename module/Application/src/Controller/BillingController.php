@@ -12,6 +12,8 @@ namespace Application\Controller;
 use Application\Billing\Bill;
 use Application\Billing\BillingManager;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class BillingController extends AbstractActionController
 {
@@ -34,6 +36,9 @@ class BillingController extends AbstractActionController
         
         $this->billingManager->printToPdf($bill);
         
+        $viewModel = new ViewModel(['bill' => $bill]);
+        
+        return $viewModel;
         return compact('bill');
 //        return [
 //            'bill' => $bill

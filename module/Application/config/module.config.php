@@ -157,8 +157,8 @@ return array(
         ),
     ),
     'view_manager' => array(
-        'display_not_found_reason' => true,
-        'display_exceptions'       => true,
+        'display_not_found_reason' => false,
+        'display_exceptions'       => false,
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
@@ -171,6 +171,9 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
+        'strategies' => [
+            'ViewJsonStrategy'
+        ]
     ),
     // Placeholder for console routes
     'console' => array(
@@ -179,4 +182,7 @@ return array(
             ),
         ),
     ),
+    'billing' => [
+        'notifications' => true
+    ]
 );

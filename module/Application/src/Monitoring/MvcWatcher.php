@@ -96,7 +96,8 @@ class MvcWatcher extends AbstractListenerAggregate
             'Dispatch triggered an error',
             [
                 'id' => $this->requestId,
-                'duration' => $this->getDuration()
+                'duration' => $this->getDuration(),
+                'error' => $event->getError()
             ]
         );
     }
@@ -118,7 +119,8 @@ class MvcWatcher extends AbstractListenerAggregate
             'Rendering triggered an error',
             [
                 'id' => $this->requestId,
-                'duration' => $this->getDuration()
+                'duration' => $this->getDuration(),
+                'error' => $event->getError()
             ]
         );
     }
