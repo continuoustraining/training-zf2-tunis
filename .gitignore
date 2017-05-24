@@ -9,4 +9,5 @@ nbproject
 .settings
 vendor
 config/development.config.php
+*.local.php
 composer.phar
