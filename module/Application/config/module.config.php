@@ -14,6 +14,9 @@ use Application\Billing\NotifierFactory;
 use Application\Monitoring\MvcWatcherFactory;
 use Application\Services\ArticleManagerFactory;
 use Application\Services\ServiceFactory;
+use Application\User\UserController;
+use Application\User\UserControllerFactory;
+use Application\User\UserFormFactory;
 use Zend\Log\Logger;
 use Zend\ServiceManager\ServiceManager;
 
@@ -78,6 +81,17 @@ return array(
                                 'action' => 'print'
                             ]
                         ]
+                    ]
+                ]
+            ],
+            'user' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/create-user',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application',
+                        'controller' => 'User',
+                        'action' => 'create'
                     ]
                 ]
             ]
@@ -150,10 +164,11 @@ return array(
     ),
     'controllers' => array(
         'factories' => [
-            'Application\Billing' => Controller\BillingControllerFactory::class
+            'Application\Billing' => Controller\BillingControllerFactory::class,
+            'Application\User' => UserControllerFactory::class
         ],
         'invokables' => array(
-            'Application\Controller\Index' => Controller\IndexController::class
+            'Application\Controller\Index' => Controller\IndexController::class,
         ),
     ),
     'view_manager' => array(
@@ -175,6 +190,13 @@ return array(
             'ViewJsonStrategy'
         ]
     ),
+    
+    'form_elements' => [
+        'factories' => [
+            'user-form' => UserFormFactory::class
+        ]
+    ],
+    
     // Placeholder for console routes
     'console' => array(
         'router' => array(
