@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class UserControllerFactory implements FactoryInterface
+class UserApiControllerFactory implements FactoryInterface
 {
     /**
      * @param ServiceLocatorInterface $serviceLocator
@@ -21,7 +21,7 @@ class UserControllerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator, 'Application\User');
+        return $this($serviceLocator, 'Application\UserApi');
     }
 
     /**
@@ -29,17 +29,18 @@ class UserControllerFactory implements FactoryInterface
      */
     function __invoke(ContainerInterface $container, $requestedName)
     {
-        $controller = new UserController();
+        $controller = new UserApiController();
         
-        $form = $container->getServiceLocator()
-            ->get('formElementManager')
-            ->get('user-form');
+        $inputFilter = $container->getServiceLocator()
+            ->get('user-filter');
+        $controller->setInputFilter($inputFilter);
         
-        $userManager = $container->getServiceLocator()
-            ->get('user-manager');
-        $controller->setUserManager($userManager);
+        $hydrator = $container->getServiceLocator()
+            ->get('hydratorManager')
+            ->get('classmethods');
+        $controller->setHydrator($hydrator);
         
-        $controller->setUserForm($form);
+        $controller->setUserPrototype(new User);
         
         return $controller;
     }

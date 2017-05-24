@@ -14,11 +14,10 @@ use Application\Billing\NotifierFactory;
 use Application\Monitoring\MvcWatcherFactory;
 use Application\Services\ArticleManagerFactory;
 use Application\Services\ServiceFactory;
-use Application\User\UserController;
 use Application\User\UserControllerFactory;
+use Application\User\UserApiControllerFactory;
 use Application\User\UserFormFactory;
-use Zend\Log\Logger;
-use Zend\ServiceManager\ServiceManager;
+use Application\User\UserManagerFactory;
 
 return array(
     'router' => array(
@@ -94,6 +93,27 @@ return array(
                         'action' => 'create'
                     ]
                 ]
+            ],
+            'api' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/api',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application'
+                    ]
+                ],
+                'child_routes' => [
+                    'create-user' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/create-user',
+                            'defaults' => [
+                                'controller' => 'UserApi',
+                                'action' => 'create'
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ),
     ),
@@ -116,6 +136,7 @@ return array(
             'my-built-service' => ServiceFactory::class,
             'article-manager' => ArticleManagerFactory::class,
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+            'user-manager' => UserManagerFactory::class
         ),
         'abstract_factories' => array(
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
@@ -124,6 +145,9 @@ return array(
         ),
         'shared' => [
             'my-invokable' => false
+        ],
+        'aliases' => [
+            'entity-manager' => 'doctrine.entitymanager.orm_default'
         ],
         'initializers' => [
             
@@ -166,7 +190,8 @@ return array(
     'controllers' => array(
         'factories' => [
             'Application\Billing' => Controller\BillingControllerFactory::class,
-            'Application\User' => UserControllerFactory::class
+            'Application\User' => UserControllerFactory::class,
+            'Application\UserApi' => UserApiControllerFactory::class
         ],
         'invokables' => array(
             'Application\Controller\Index' => Controller\IndexController::class,
@@ -213,6 +238,20 @@ return array(
                         'name' => 'notempty'
                     ]
                 ]
+            ],
+            [
+                'name' => 'lastname',
+                'required' => true,
+                'filters' => [
+                    [
+                        'name' => 'stringtrim'
+                    ]
+                ],
+                'validators' => [
+                    [
+                        'name' => 'notempty'
+                    ]
+                ]
             ]
         ]
     ],
@@ -226,5 +265,26 @@ return array(
     ),
     'billing' => [
         'notifications' => true
-    ]
+    ],
+
+
+    'doctrine' => [
+        'driver' => [
+            'app_driver' => [
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => [ dirname(__DIR__) . '/src' ]
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    'Application' => 'app_driver',
+                ]
+            ]
+        ],
+        'configuration' => [
+            'orm_default' => [
+                'driver' => 'orm_default'
+            ]
+        ],
+    ],
 );

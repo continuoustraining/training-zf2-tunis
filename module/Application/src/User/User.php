@@ -8,12 +8,34 @@
 
 namespace Application\User;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Class User
+ * @package Application\User
+ * 
+ * @ORM\Entity
+ */
 class User
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue
+     * @var int
+     */
     protected $id;
-    
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
     protected $firstname;
-    
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
     protected $lastname;
 
     /**

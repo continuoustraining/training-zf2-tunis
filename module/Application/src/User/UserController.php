@@ -15,6 +15,9 @@ class UserController extends AbstractActionController
 {
     /** @var  Form */
     protected $userForm;
+    
+    /** @var  UserManager */
+    protected $userManager;
 
     /**
      * @param Form $userForm
@@ -23,6 +26,16 @@ class UserController extends AbstractActionController
     public function setUserForm(Form $userForm)
     {
         $this->userForm = $userForm;
+        return $this;
+    }
+
+    /**
+     * @param UserManager $userManager
+     * @return UserController
+     */
+    public function setUserManager($userManager)
+    {
+        $this->userManager = $userManager;
         return $this;
     }
     
@@ -36,8 +49,9 @@ class UserController extends AbstractActionController
             
             $form->setData($params);
             if ($form->isValid()) {
+                /** @var User $user */
                 $user = $form->getData();
-                var_dump($user);
+                $this->userManager->persist($user);
             }
         }
         
