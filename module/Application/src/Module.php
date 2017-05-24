@@ -9,6 +9,7 @@
 
 namespace Application;
 
+use Application\Monitoring\MvcWatcher;
 use Application\Services\ArticleManager;
 use Zend\Log\Logger;
 use Zend\Mvc\ModuleRouteListener;
@@ -33,15 +34,20 @@ class Module
         $logger->info('foo', ['user' => 'toto']);
         
         /** @var ArticleManager $articleManager */
-        $articleManager = $serviceManager->get('article-manager');
+//        $articleManager = $serviceManager->get('article-manager');
 //        var_dump($articleManager->getServiceLocator());die;
         
-        $e->getApplication()
-            ->getEventManager()
-            ->attach(
-                MvcEvent::EVENT_DISPATCH,
-                $this
-            );
+//        $eventManager->attach(
+//            MvcEvent::EVENT_ROUTE,
+//                function(MvcEvent $e) {
+//                    var_dump($e);die;
+//                });
+        
+        $sharedManager = $eventManager->getSharedManager();
+        
+        /** @var MvcWatcher $mvcWatcher */
+        $mvcWatcher = $serviceManager->get('mvc-watcher');
+        $mvcWatcher->attach($eventManager);
     }
     
     public function __invoke(MvcEvent $e) {

@@ -9,6 +9,9 @@
 
 namespace Application;
 
+use Application\Billing\BillingManagerFactory;
+use Application\Billing\NotifierFactory;
+use Application\Monitoring\MvcWatcherFactory;
 use Application\Services\ArticleManagerFactory;
 use Application\Services\ServiceFactory;
 use Zend\Log\Logger;
@@ -57,6 +60,27 @@ return array(
                     ),
                 ),
             ),
+            'billing' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/billing',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application',
+                        'controller' => 'Billing'
+                    ]
+                ],
+                'child_routes' => [
+                    'print' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/:billId/print',
+                            'defaults' => [
+                                'action' => 'print'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ),
     ),
     'service_manager' => array(
@@ -72,6 +96,9 @@ return array(
 //            'my-built-service' => function (ServiceManager $sm) {
 //                return new \ArrayObject([]);
 //            },
+            'billing-manager' => BillingManagerFactory::class,
+            'billing-notifier' => NotifierFactory::class,
+            'mvc-watcher' => MvcWatcherFactory::class,
             'my-built-service' => ServiceFactory::class,
             'article-manager' => ArticleManagerFactory::class,
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
@@ -122,6 +149,9 @@ return array(
         ),
     ),
     'controllers' => array(
+        'factories' => [
+            'Application\Billing' => Controller\BillingControllerFactory::class
+        ],
         'invokables' => array(
             'Application\Controller\Index' => Controller\IndexController::class
         ),
