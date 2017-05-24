@@ -120,6 +120,7 @@ return array(
         'abstract_factories' => array(
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
             \Zend\Log\LoggerAbstractServiceFactory::class,
+            \Zend\InputFilter\InputFilterAbstractServiceFactory::class
         ),
         'shared' => [
             'my-invokable' => false
@@ -194,6 +195,25 @@ return array(
     'form_elements' => [
         'factories' => [
             'user-form' => UserFormFactory::class
+        ]
+    ],
+    
+    'input_filter_specs' => [
+        'user-filter' => [
+            [
+                'name' => 'firstname',
+                'required' => true,
+                'filters' => [
+                    [
+                        'name' => 'stringtrim'
+                    ]
+                ],
+                'validators' => [
+                    [
+                        'name' => 'notempty'
+                    ]
+                ]
+            ]
         ]
     ],
     

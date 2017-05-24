@@ -30,6 +30,17 @@ class UserController extends AbstractActionController
     {
         $form = $this->userForm;
         
+        // POST case
+        if ($this->getRequest()->isPost()) {
+            $params = $this->getRequest()->getPost();
+            
+            $form->setData($params);
+            if ($form->isValid()) {
+                $user = $form->getData();
+                var_dump($user);
+            }
+        }
+        
         return compact('form');
     }
 }
